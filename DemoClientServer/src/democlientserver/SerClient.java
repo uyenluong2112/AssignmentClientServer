@@ -3,8 +3,10 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package assignmentcs;
+package democlientserver;
 
+import democlientserver.model.Client;
+import democlientserver.model.Message;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
@@ -14,12 +16,12 @@ import java.net.Socket;
 
 public class SerClient extends Thread {
 
-    Socket c1;
+    Client client;
     BroadCast bthread;
 
-    public SerClient(Socket c1, BroadCast bthread) {
+    public SerClient(Client client, BroadCast bthread) {
         super();
-        this.c1 = c1;
+        this.client = client;
         this.bthread = bthread;
     }
 
@@ -29,13 +31,13 @@ public class SerClient extends Thread {
         try {
             while (true) {
 
-                InputStream c1In = c1.getInputStream();
+                InputStream c1In = client.getSocket().getInputStream();
 
                 DataInputStream dis = new DataInputStream(c1In);
                 String newmess = new String(dis.readUTF());
                 //System.out.println("recieved:"+newmess);
 
-                MyServer.addmessage(new ClientMessInfo(c1, newmess));
+                client.getInRoom().getListMessage().add(new Message(client.getSocket(), newmess));
                 bthread.startmessage();
                 Thread.sleep(10);
             }

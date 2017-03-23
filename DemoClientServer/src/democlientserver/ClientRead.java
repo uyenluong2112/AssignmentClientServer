@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package assignmentcs;
+package democlientserver;
 
 import java.io.DataInputStream;
 import java.io.IOException;
@@ -32,7 +32,7 @@ public class ClientRead extends Thread {
             }
         } catch (IOException e) {
             // TODO Auto-generated catch block
-            e.printStackTrace();
+            e.getMessage();
         }
     }
 }

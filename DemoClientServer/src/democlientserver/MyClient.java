@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package assignmentcs;
+package democlientserver;
 
 import java.net.*;
 import java.io.*;
@@ -12,7 +12,7 @@ public class MyClient {
 
     public static void main(String args[]) throws IOException {
         // Open connection at port 1456
-        Socket c1 = new Socket("localhost", 1456);
+        Socket c1 = new Socket("localhost", 1233);
         new ClientRead(c1).start();
 
         new ClientWrite(c1).start();
