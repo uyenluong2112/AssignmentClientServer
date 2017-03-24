@@ -37,7 +37,7 @@ public class SerClient extends Thread {
                 String newmess = new String(dis.readUTF());
                 //System.out.println("recieved:"+newmess);
 
-                client.getInRoom().getListMessage().add(new Message(client.getSocket(), newmess));
+                client.getInRoom().pushMessage(client.getInRoom().getListMessage(),new Message(client.getSocket(), newmess));
                 bthread.startmessage();
                 Thread.sleep(10);
             }

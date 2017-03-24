@@ -39,6 +39,7 @@ public class ClientWrite extends Thread {
 
                 String message = in.readLine();
                 dos.writeUTF(message);
+                dos.flush();
 
             }
 

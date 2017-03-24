@@ -47,6 +47,13 @@ public class Room {
         this.listClient = listClient;
     }
     
-    
+   
+    public synchronized void addClient(List<Client> listClient, Client client){
+        listClient.add(client);
+    }
+
+    public void pushMessage(LinkedList<Message> listMessage, Message message) {
+        listMessage.add(message);
+    }
             
 }

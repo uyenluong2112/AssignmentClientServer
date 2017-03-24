@@ -32,43 +32,46 @@ public class FilterClientToRoom extends Thread {
 
     public void run() {
         InputStream c1In = null;
+        BroadCast broadCast = null;
         try {
             c1In = connected.getSocket().getInputStream();
             DataInputStream dis = new DataInputStream(c1In);
             String newmess = new String(dis.readUTF());
             if (newmess.contains("JPUB")) {
                 server.publicRoom.getListClient().add(connected);
-                System.out.print(connected.getSocket().getPort() + " connected to public room");
-                new BroadCast(server.publicRoom.getListMessage(), server.publicRoom).start();
+                connected.setInRoom(server.publicRoom);
+                System.out.printf(connected.getSocket().getPort() + " connected to public room");
+                broadCast = new BroadCast(server.publicRoom.getListMessage(), server.publicRoom);
+                broadCast.start();
+                new SerClient(connected, broadCast).start();
 
             } else if (newmess.contains("JPRIV")) {
                 String passCode = newmess.split(" ")[1];
                 for (Room room : server.privateListRoom) {
                     if (room.getPasscode() == passCode) {
-                        room.getListClient().add(connected);
+                        room.addClient(room.getListClient(),connected);
                         connected.setInRoom(room);
-                        new BroadCast(room.getListMessage(), room).start();
+                        broadCast = new BroadCast(room.getListMessage(), room);
+                        broadCast.start();
+                        new SerClient(connected, broadCast).start();
                         break;
                     }
                 }
-                System.out.print(connected.getSocket().getPort() + " connected to private room");
+                System.out.printf(connected.getSocket().getPort() + " connected to private room");
             } else if (newmess.contains("CREATE")) {
                 String passCode = newmess.split(" ")[1];
                 Room newRoom = new Room(passCode, new LinkedList<Client>(), new LinkedList<Message>());
-                newRoom.getListClient().add(connected);
+                newRoom.addClient(newRoom.getListClient(),connected);
                 server.privateListRoom.add(newRoom);
-                new BroadCast(newRoom.getListMessage(), newRoom).start();
-                System.out.print(connected.getSocket().getPort() + " create a private room");
+                connected.setInRoom(newRoom);
+                broadCast = new BroadCast(newRoom.getListMessage(), newRoom);
+                broadCast.start();
+                new SerClient(connected, broadCast).start();
+                System.out.printf(connected.getSocket().getPort() + " create a private room");
             }
-            this.stop();
+//            this.stop();
         } catch (IOException ex) {
             Logger.getLogger(FilterClientToRoom.class.getName()).log(Level.SEVERE, null, ex);
-        } finally {
-            try {
-                c1In.close();
-            } catch (IOException ex) {
-                Logger.getLogger(FilterClientToRoom.class.getName()).log(Level.SEVERE, null, ex);
-            }
         }
     }
 }
