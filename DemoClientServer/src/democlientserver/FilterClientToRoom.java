@@ -48,7 +48,7 @@ public class FilterClientToRoom extends Thread {
             } else if (newmess.contains("JPRIV")) {
                 String passCode = newmess.split(" ")[1];
                 for (Room room : server.privateListRoom) {
-                    if (room.getPasscode() == passCode) {
+                    if (room.getPasscode().equals(passCode)) {
                         room.addClient(room.getListClient(),connected);
                         connected.setInRoom(room);
                         broadCast = new BroadCast(room.getListMessage(), room);
