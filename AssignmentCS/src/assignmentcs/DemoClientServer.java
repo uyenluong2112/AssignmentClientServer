@@ -7,15 +7,16 @@ package assignmentcs;
 
 /**
  *
- * @author Uyen
+ * @author admin
  */
-public class AssignmentCS {
+public class DemoClientServer {
 
     /**
      * @param args the command line arguments
      */
     public static void main(String[] args) {
         // TODO code application logic here
+        new Server().Start(1233);
     }
     
 }
